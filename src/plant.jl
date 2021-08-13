@@ -86,7 +86,7 @@ macro plant(exprs...)
     body = quote
         if is_mpi_root()
             printstyled(stderr, "[ ", $prefix, ": ", color=:green, bold=true)
-            println($readable_id)
+            println(stderr, $readable_id)
         end
         $(exprs[end])
     end
@@ -142,7 +142,7 @@ macro plant(exprs...)
         path = $path
         if is_mpi_root()
             printstyled(stderr, $message; color=:green, bold=true)
-            println("`", path, "`")
+            println(stderr, "`", path, "`")
         end
         mkpath($path)
         $expr
