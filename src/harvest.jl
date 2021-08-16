@@ -106,6 +106,7 @@ See also [`@harvest`](@ref), a convenience macro for creating `f`.
 """
 function harvest(f, dir; skip=0)
     return map(filter(endswith(".arrow"), readdir(dir; join=true))) do file
-        f(RimuIO.load_df(file))
+        df = RimuIO.load_df(file)
+        f(df[skip+1:end,:])
     end |> DataFrame
 end
