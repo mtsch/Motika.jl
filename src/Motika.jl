@@ -14,6 +14,7 @@ using KrylovKit
 using MacroTools
 using MacroTools: postwalk
 using NamedTupleTools
+using ProgressMeter
 using Serialization
 using SHA
 

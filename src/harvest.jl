@@ -105,8 +105,9 @@ are skipped.
 See also [`@harvest`](@ref), a convenience macro for creating `f`.
 """
 function harvest(f, dir; skip=0)
-    return map(filter(endswith(".arrow"), readdir(dir; join=true))) do file
+    result = @showprogress map(filter(endswith(".arrow"), readdir(dir; join=true))) do file
         df = RimuIO.load_df(file)
         f(df[skip+1:end,:])
-    end |> DataFrame
+    end
+    return DataFrame(result)
 end
