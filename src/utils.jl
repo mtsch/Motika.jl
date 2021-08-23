@@ -17,9 +17,15 @@ end
 
 Calculate projected energy from data frame `df`. Returns `NaN`s if `med_and_errs` fails.
 """
-function projected_energy(df)
+function projected_energy(df, i=1)
     try
-        return med_and_errs(ratio_of_means(df.hproj, df.vproj))
+        if hasproperty(df, :hproj)
+            return med_and_errs(ratio_of_means(df.hproj, df.vproj))
+        else
+            return med_and_errs(
+                ratio_of_means(df[!,Symbol("hproj_$i")], df[!,Symbol("vproj_$i")])
+            )
+        end
     catch
         return (NaN, NaN, NaN, NaN, NaN)
     end
