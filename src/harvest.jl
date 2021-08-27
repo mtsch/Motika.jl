@@ -106,8 +106,13 @@ See also [`@harvest`](@ref), a convenience macro for creating `f`.
 """
 function harvest(f, dir; skip=0)
     result = @showprogress map(filter(endswith(".arrow"), readdir(dir; join=true))) do file
-        df = RimuIO.load_df(file)
-        f(df[skip+1:end,:])
+        try
+            df = RimuIO.load_df(file)
+            f(df[skip+1:end,:])
+        catch
+            @warn "reading `$file` failed"
+            nothing
+        end
     end
-    return DataFrame(result)
+    return DataFrame(filter(!isnothing, result))
 end

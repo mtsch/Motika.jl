@@ -99,9 +99,14 @@ macro plant(exprs...)
                 ex = :($ex; df.$name = fill($name, size(df, 1)))
             end
             quote
+                filename = joinpath($path, string($id, ".arrow"))
+                if isfile(filename)
+                    println(stderr, "  File `", filename, "` exists. Skipping.")
+                    continue
+                end
                 $ex
                 if is_mpi_root()
-                    RimuIO.save_df(joinpath($path, string($id, ".arrow")), df)
+                    RimuIO.save_df(filename, df)
                 end
             end
         else
